@@ -18,6 +18,8 @@ export default class Builder {
         modelItems: [],
         isLoading: false,
         headers: this.store.headers,
+        fields: this.store.fields,
+        dataTableActions: this.store.dataTableActions,
         dialog: false,
         dialogDelete: false,
         editedIndex: -1,
@@ -30,6 +32,8 @@ export default class Builder {
         modelItemList: (state) => state.modelItems,
         isLoading: (state) => state.isLoading,
         headers: (state) => state.headers,
+        fields: (state) => state.fields,
+        dataTableActions: (state) => state.dataTableActions,
         dialog: (state) => state.dialog,
         dialogDelete: (state) => state.dialogDelete,
         editedIndex: (state) => state.editedIndex,
@@ -47,6 +51,9 @@ export default class Builder {
           state.editedItem = { ...item };
           state.dialog = true;
         },
+        getHeaders(state) {
+          state.headers = this.store.headers;
+        },
         deleteItem(state, item) {
           state.editedIndex = state.modelItems.indexOf(item);
           state.editedItem = { ...item };
@@ -59,6 +66,9 @@ export default class Builder {
           state.dialog = false;
           state.editedItem = { ...state.defaultItem };
           state.editedIndex = -1;
+        },
+        open(state) {
+          state.dialog = true;
         },
         formTitle(state) {
           state.formTitle = state.editedIndex === -1 ? 'New Item' : 'Edit Item';
@@ -80,7 +90,15 @@ export default class Builder {
         async fetchAll({ commit }) {
           await client.get(`/${this.state.product.slug}/`)
             .then((response) => {
-              commit('setModelItems', response.data);
+              console.log(response.data);
+              commit('setModelItems', [{
+                id: 1,
+                title: 'this is title',
+                description: 'this is description',
+                category: {
+                  title: 'Category Name',
+                },
+              }]);
             });
         },
         deleteMethod({ commit }, item) {
@@ -103,6 +121,12 @@ export default class Builder {
         saveMethod({ commit }) {
           commit('save');
           commit('close');
+        },
+        openMethod({ commit }) {
+          commit('open');
+        },
+        getHeadersMethod({ commit }) {
+          commit('getHeaders');
         },
       },
     };

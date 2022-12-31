@@ -5,8 +5,24 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex';
+
+const { mapGetters, mapActions } = createNamespacedHelpers('product');
+
 export default {
-  name: 'ProductIndex',
+  name: 'ProductCreate',
+
+  computed: {
+    ...mapGetters(['formTitle', 'dialog', 'headers', 'creatable', 'dialogDelete', 'editedIndex', 'editedItem', 'defaultItem']),
+  },
+
+  created() {
+    this.fetchAll();
+  },
+
+  methods: {
+    ...mapActions(['fetchAll', 'deleteItemConfirmMethod', 'closeMethod', 'closeDeleteMethod', 'saveMethod']),
+  },
 };
 </script>
 

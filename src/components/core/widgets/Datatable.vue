@@ -7,17 +7,12 @@
   >
     <template #[`item.actions`]="{ item }">
       <v-icon
+        :key="dataTableAction.key" v-for="dataTableAction in dataTableActions"
         small
         class="mr-2"
-        @click="editMethod(item)"
+        @click="callMethod(dataTableAction.method, item)"
       >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteMethod(item)"
-      >
-        mdi-delete
+        {{ dataTableAction.icon }}
       </v-icon>
     </template>
     <template v-slot:no-data>
@@ -38,9 +33,12 @@ const { mapGetters, mapActions } = createNamespacedHelpers('product');
 
 export default {
   name: 'CoreDatatable',
-  computed: { ...mapGetters(['modelItemList', 'isLoading', 'headers']) },
+  computed: { ...mapGetters(['modelItemList', 'headers', 'dataTableActions', 'isLoading', 'headers']) },
   methods: {
     ...mapActions(['fetchAll', 'editMethod', 'deleteMethod']),
+    callMethod(functionName, event) {
+      this.$store.dispatch(functionName, event);
+    },
   },
 };
 </script>

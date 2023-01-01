@@ -81,6 +81,36 @@
         </v-dialog>
       </v-toolbar>
     </template>
+    <template>
+      <v-card-text>
+        <form @submit.prevent="filterForm"></form>
+        <v-container>
+          <v-row>
+            <v-col
+              v-for="filter in filters"
+              :key= "filter.name"
+              cols="12"
+              sm="6"
+              md="4"
+            >
+              <v-text-field
+                :v-if="filter.component.tag === 'v-text-field'"
+                v-model="filterFormObj[filter.name]"
+                :label="filter.label"
+                :name="filter.name"
+              ></v-text-field>
+            </v-col>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="filterForm"
+            >
+              Filter
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </template>
     <core-datatable></core-datatable>
   </div>
 </template>
@@ -96,7 +126,7 @@ export default {
   components: { CoreDatatable },
 
   computed: {
-    ...mapGetters(['formTitle', 'dialog', 'fields', 'headers', 'creatable', 'dialogDelete', 'editedIndex', 'editedItem', 'defaultItem']),
+    ...mapGetters(['formTitle', 'dialog', 'fields', 'filterFormObj', 'filters', 'headers', 'creatable', 'dialogDelete', 'editedIndex', 'editedItem', 'defaultItem']),
   },
 
   created() {
@@ -104,7 +134,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchAll', 'deleteItemConfirmMethod', 'closeMethod', 'openMethod', 'closeDeleteMethod', 'saveMethod']),
+    ...mapActions(['fetchAll', 'filterForm', 'deleteItemConfirmMethod', 'closeMethod', 'openMethod', 'closeDeleteMethod', 'saveMethod']),
   },
 };
 </script>

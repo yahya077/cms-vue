@@ -19,6 +19,10 @@ export default class Builder {
         isLoading: false,
         headers: this.store.headers,
         fields: this.store.fields,
+        indexPath: this.store.indexPath,
+        detailPagePrefix: this.store.detailPagePrefix,
+        filterFormObj: this.store.filterForm,
+        filters: this.store.filters,
         dataTableActions: this.store.dataTableActions,
         dialog: false,
         dialogDelete: false,
@@ -33,6 +37,10 @@ export default class Builder {
         isLoading: (state) => state.isLoading,
         headers: (state) => state.headers,
         fields: (state) => state.fields,
+        indexPath: (state) => state.indexPath,
+        detailPagePrefix: (state) => state.detailPagePrefix,
+        filterFormObj: (state) => state.filterFormObj,
+        filters: (state) => state.filters,
         dataTableActions: (state) => state.dataTableActions,
         dialog: (state) => state.dialog,
         dialogDelete: (state) => state.dialogDelete,
@@ -87,8 +95,27 @@ export default class Builder {
         },
       },
       actions: {
-        async fetchAll({ commit }) {
-          await client.get(`/${this.state.product.slug}/`)
+        async fetchAll({ commit, state }) {
+          await client.get(state.indexPath)
+            .then((response) => {
+              console.log(response.data);
+              commit('setModelItems', [{
+                id: 1,
+                title: 'this is title',
+                description: 'this is description',
+                category: {
+                  title: 'Category Name',
+                },
+              }]);
+            });
+        },
+        async filterForm({ commit, state }) {
+          let filterQuery = '?';
+          Object.keys(state.filterFormObj).forEach((key) => {
+            filterQuery += `${key}=${state.filterFormObj[key]}`;
+          });
+          console.log(filterQuery);
+          await client.get(state.indexPath + filterQuery)
             .then((response) => {
               console.log(response.data);
               commit('setModelItems', [{

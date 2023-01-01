@@ -15,12 +15,27 @@ let store;
         name: 'product',
         store: {
           slug: 'todos',
+          indexPath: 'https://jsonplaceholder.typicode.com/todos',
+          detailPagePrefix: 'http://localhost:8080/#/product/',
           emptyItemObj: {
             id: '',
             title: '',
             description: '',
             userId: 0,
           },
+          filterForm: {
+            title: '',
+          },
+          filters: [
+            {
+              name: 'title',
+              label: 'Title',
+              placeHolder: 'Enter title',
+              component: {
+                tag: 'v-text-field',
+              },
+            },
+          ],
           fields: [
             {
               name: 'title',
@@ -66,6 +81,7 @@ let store;
               text: 'ID',
               align: 'start',
               value: 'id',
+              endpoint: 'http://localhost:8080/#/productCreate',
             },
             {
               text: 'Title',

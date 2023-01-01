@@ -5,6 +5,11 @@
     sort-by="calories"
     class="elevation-1"
   >
+    <template #[`item.id`]="{ item }">
+      <a :href="`${detailPagePrefix}${item.id}`">
+        {{ item.id }}
+      </a>
+    </template>
     <template #[`item.actions`]="{ item }">
       <v-icon
         :key="dataTableAction.key" v-for="dataTableAction in dataTableActions"
@@ -33,7 +38,7 @@ const { mapGetters, mapActions } = createNamespacedHelpers('product');
 
 export default {
   name: 'CoreDatatable',
-  computed: { ...mapGetters(['modelItemList', 'headers', 'dataTableActions', 'isLoading', 'headers']) },
+  computed: { ...mapGetters(['modelItemList', 'headers', 'detailPagePrefix', 'dataTableActions', 'isLoading', 'headers']) },
   methods: {
     ...mapActions(['fetchAll', 'editMethod', 'deleteMethod']),
     callMethod(functionName, event) {
